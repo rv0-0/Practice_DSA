@@ -1,9 +1,6 @@
 import java.util.*;
 
 public class Main {
-    public static int floorPathLen = Integer.MAX_VALUE;
-    static String floorPath = "";
-
     public static class Edge {
         int v, wt;
 
