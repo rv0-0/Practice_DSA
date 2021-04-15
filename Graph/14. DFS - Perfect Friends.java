@@ -1,0 +1,75 @@
+/*
+* 1. You are given a number n (representing the number of students). Each student will have an id from 0 to n - 1.
+* 2. You are given a number k (representing the number of clubs)
+* 3. In the next k lines, two numbers are given separated by a space. The numbers are ids of students belonging to same club.
+*/
+
+
+You have to find in how many ways can we select a pair of students such that both students are from different clubs.
+import java.util.*;
+
+public class Main {
+    public static int floorPathLen = Integer.MAX_VALUE;
+    static String floorPath = "";
+
+    public static class Edge {
+        int v, wt;
+
+        Edge(int v, int wt) {
+            this.v = v;
+            this.wt = wt;
+        }
+    }
+
+    public static void main(String[] args) {
+        HashMap<Integer, ArrayList<Edge>> g = new HashMap<>();
+        int n, e;
+        Scanner sc = new Scanner(System.in);
+        n = sc.nextInt();
+        e = sc.nextInt();
+        for (int i = 0; i < n; i++) {
+            g.put(i, new ArrayList<Edge>());
+        }
+
+        for (int i = 0; i < e; i++) {
+            int u = sc.nextInt();
+            int v = sc.nextInt();
+            //int wt = sc.nextInt();
+            g.get(u).add(new Edge(v, 1));
+            g.get(v).add(new Edge(u, 1));
+        }
+        boolean[] visited = new boolean[n];
+        ArrayList<ArrayList<Integer>> result = new ArrayList<>();
+        for(int i=0;i<n;i++)
+        {
+            if(!visited[i])
+            {
+                ArrayList<Integer> component =  new ArrayList<>();
+                getConnectedVertices(g,visited,i, component);
+                result.add(component);
+            }
+        }
+        int ans = 0;
+        for(int i=0;i<result.size();i++)
+        {
+            for(int j=i+1;j<result.size();j++)
+            {
+                ans += result.get(i).size() * result.get(j).size();
+            }
+        }
+        System.out.println(ans);
+    }
+
+    public static void getConnectedVertices(HashMap<Integer, ArrayList<Edge>> g, boolean[] visited, int src,ArrayList<Integer> component)
+    {
+        visited[src] = true;
+        component.add(src);
+        for(Edge neigh : g.get(src))
+        {
+            if(!visited[neigh.v])
+            {
+                getConnectedVertices(g, visited, neigh.v,component);
+            }
+        }
+    }
+}
